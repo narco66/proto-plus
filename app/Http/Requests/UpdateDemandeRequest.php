@@ -26,6 +26,13 @@ class UpdateDemandeRequest extends FormRequest
             'beneficiaires.*.beneficiaire_type' => ['required_with:beneficiaires', 'in:fonctionnaire,ayant_droit'],
             'beneficiaires.*.beneficiaire_id' => ['required_with:beneficiaires', 'integer'],
             'beneficiaires.*.role_dans_demande' => ['nullable', 'in:principal,secondaire'],
+            'documents' => ['nullable', 'array', 'max:5'],
+            'documents.*.type_document' => ['required_with:documents.*.file', 'in:passeport,carte_identite,acte_naissance,justificatif_domicile,photo_identite,autre'],
+            'documents.*.titre' => ['required_with:documents.*.file', 'string', 'max:255'],
+            'documents.*.description' => ['required_with:documents.*.file', 'string'],
+            'documents.*.file' => ['required_with:documents.*.titre', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:10240'],
+            'documents.*.beneficiaire_type' => ['nullable', 'in:fonctionnaire,ayant_droit'],
+            'documents.*.beneficiaire_id' => ['nullable', 'integer'],
         ];
     }
 }

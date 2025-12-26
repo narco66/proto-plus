@@ -124,22 +124,26 @@
             @if($demande->documents->count() > 0)
                 <div class="table-responsive">
                     <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>Nom du fichier</th>
-                                <th>Taille</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($demande->documents as $document)
-                                <tr>
-                                    <td>{{ $document->type_document }}</td>
-                                    <td>{{ $document->nom_fichier }}</td>
-                                    <td>{{ number_format($document->taille / 1024, 2) }} KB</td>
-                                    <td>{{ $document->created_at->format('d/m/Y H:i') }}</td>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Titre</th>
+                        <th>Description</th>
+                        <th>Nom du fichier</th>
+                        <th>Taille</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($demande->documents as $document)
+                        <tr>
+                            <td>{{ $document->type_document }}</td>
+                            <td>{{ $document->titre }}</td>
+                            <td class="text-break">{{ $document->description }}</td>
+                            <td>{{ $document->nom_fichier }}</td>
+                            <td>{{ number_format($document->taille / 1024, 2) }} KB</td>
+                            <td>{{ $document->created_at->format('d/m/Y H:i') }}</td>
                                     <td>
                                         <a href="#" class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-download"></i> Télécharger

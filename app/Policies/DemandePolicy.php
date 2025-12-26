@@ -13,6 +13,13 @@ class DemandePolicy
         'secretaire_general',
         'directeur_protocole',
     ];
+    private const SUBMISSION_ROLES = [
+        'chef_service',
+        'directeur_protocole',
+        'secretaire_general',
+        'directeur_SI',
+        'admin',
+    ];
 
     public function viewAny(User $user): bool
     {
@@ -69,9 +76,15 @@ class DemandePolicy
 
     public function submit(User $user, Demande $demande): bool
     {
-        return $demande->demandeur_user_id === $user->id 
-            && $demande->statut === 'brouillon'
-            && $user->can('demandes.submit');
+        if ($demande->statut !== 'brouillon' || !$user->can('demandes.submit')) {
+            return false;
+        }
+
+        if ($demande->demandeur_user_id === $user->id) {
+            return true;
+        }
+
+        return $user->hasAnyRole(self::SUBMISSION_ROLES);
     }
 
     public function validateLevel1(User $user, Demande $demande): bool

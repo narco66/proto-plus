@@ -164,25 +164,29 @@
         @if($demande->documents->count() > 0)
             <x-card title="Documents joints">
                 <div class="table-responsive">
-                    <table class="table">
-                        <thead>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Titre</th>
+                            <th>Description</th>
+                            <th>Nom du fichier</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($demande->documents as $document)
                             <tr>
-                                <th>Type</th>
-                                <th>Nom du fichier</th>
-                                <th>Date</th>
+                                <td>{{ $document->type_document }}</td>
+                                <td>{{ $document->titre }}</td>
+                                <td class="text-break">{{ $document->description }}</td>
+                                <td>{{ $document->nom_fichier }}</td>
+                                <td>{{ $document->created_at->format('d/m/Y H:i') }}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($demande->documents as $document)
-                                <tr>
-                                    <td>{{ $document->type_document }}</td>
-                                    <td>{{ $document->nom_fichier }}</td>
-                                    <td>{{ $document->created_at->format('d/m/Y H:i') }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
             </x-card>
         @endif
 

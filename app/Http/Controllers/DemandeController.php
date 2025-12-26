@@ -8,12 +8,14 @@ use App\Http\Requests\UpdateDemandeRequest;
 use App\Models\Demande;
 use App\Models\User;
 use App\Services\DemandeService;
+use App\Services\DocumentService;
 use Illuminate\Http\Request;
 
 class DemandeController extends Controller
 {
     public function __construct(
-        protected DemandeService $demandeService
+        protected DemandeService $demandeService,
+        protected DocumentService $documentService
     ) {
         $this->middleware('auth');
     }
@@ -86,6 +88,8 @@ class DemandeController extends Controller
                 $request->validated(),
                 $request->user()->id
             );
+
+            $this->handleDocumentUploads($request, $demande);
 
             return redirect()
                 ->route('demandes.show', $demande)
@@ -178,6 +182,8 @@ class DemandeController extends Controller
                 $request->user()->id
             );
 
+            $this->handleDocumentUploads($request, $demande);
+
             return redirect()
                 ->route('demandes.show', $demande)
                 ->with('success', 'Demande mise à jour avec succès.');
@@ -263,5 +269,22 @@ class DemandeController extends Controller
                 ->route('demandes.show', $demande)
                 ->with('error', 'Une erreur est survenue lors de la soumission de la demande. Veuillez réessayer ou contacter l\'administrateur.');
         }
+    }
+
+    protected function handleDocumentUploads(Request $request, Demande $demande): void
+    {
+        $payloads = [];
+        $uploads = $request->file('documents', []);
+
+        foreach ($request->input('documents', []) as $index => $document) {
+            $document['file'] = $uploads[$index] ?? null;
+            $payloads[] = $document;
+        }
+
+        if (empty($payloads)) {
+            return;
+        }
+
+        $this->documentService->handleUploads($demande, $payloads, $request->user()->id);
     }
 }

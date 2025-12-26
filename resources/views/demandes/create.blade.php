@@ -1,7 +1,7 @@
 <x-proto-layout page-title="Nouvelle demande" :breadcrumbs="[['label' => 'Demandes', 'url' => route('demandes.index')], ['label' => 'Nouvelle demande']]">
     @section('content')
         <x-card title="Créer une nouvelle demande protocolaire">
-            <form action="{{ route('demandes.store') }}" method="POST" id="demande-form">
+            <form action="{{ route('demandes.store') }}" method="POST" id="demande-form" enctype="multipart/form-data">
                 @csrf
 
                 <!-- Type de demande -->
@@ -101,6 +101,20 @@
                     @enderror
                 </div>
 
+                <div class="mb-4">
+                    <label class="form-label">Pièces jointes</label>
+                    <div id="documents-container"></div>
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addDocument()">
+                        <i class="bi bi-paperclip me-1"></i> Ajouter une pièce
+                    </button>
+                    <p class="small text-muted mt-2 mb-0">
+                        Formats supportés : PDF, JPG, PNG (max 10 Mo).
+                    </p>
+                    @error('documents')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 <!-- Actions -->
                 <div class="d-flex justify-content-between">
                     <a href="{{ route('demandes.index') }}" class="btn btn-secondary">
@@ -161,6 +175,63 @@
                     addAyantDroit();
                 }
             });
+
+            const DOCUMENT_TYPES = [
+                { value: 'passeport', label: 'Passeport' },
+                { value: 'carte_identite', label: 'Carte d\'identité' },
+                { value: 'acte_naissance', label: 'Acte de naissance' },
+                { value: 'justificatif_domicile', label: 'Justificatif de domicile' },
+                { value: 'photo_identite', label: 'Photo d\'identité' },
+                { value: 'autre', label: 'Autre' },
+            ];
+
+            let documentIndex = 0;
+
+            function addDocument() {
+                const container = document.getElementById('documents-container');
+                if (!container) {
+                    return;
+                }
+
+                const selectOptions = DOCUMENT_TYPES.map(type => `<option value="${type.value}">${type.label}</option>`).join('');
+                const div = document.createElement('div');
+                div.className = 'document-item border rounded p-3 mb-3';
+                div.id = 'document-' + documentIndex;
+                div.innerHTML = `
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Type de document</label>
+                            <select name="documents[${documentIndex}][type_document]" class="form-select" required>
+                                ${selectOptions}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Titre</label>
+                            <input type="text" name="documents[${documentIndex}][titre]" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fichier</label>
+                            <input type="file" name="documents[${documentIndex}][file]" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Description</label>
+                            <textarea name="documents[${documentIndex}][description]" class="form-control" rows="2" required></textarea>
+                        </div>
+                    </div>
+                    <div class="text-end mt-2">
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeDocument(${documentIndex})">
+                            <i class="bi bi-trash"></i> Retirer
+                        </button>
+                    </div>
+                `;
+
+                container.appendChild(div);
+                documentIndex++;
+            }
+
+            function removeDocument(index) {
+                document.getElementById('document-' + index)?.remove();
+            }
         </script>
         @endpush
     @endsection

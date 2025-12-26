@@ -33,6 +33,8 @@ class DocumentFactory extends Factory
             'chemin_fichier' => 'documents/' . fake()->uuid() . '.pdf',
             'taille' => fake()->numberBetween(10000, 5000000),
             'mime_type' => fake()->randomElement(['application/pdf', 'image/jpeg', 'image/png']),
+            'titre' => fake()->sentence(3),
+            'description' => fake()->paragraph(),
             'checksum' => fake()->sha256(),
             'beneficiaire_type' => $beneficiaireType,
             'beneficiaire_id' => $beneficiaireType === 'fonctionnaire' 

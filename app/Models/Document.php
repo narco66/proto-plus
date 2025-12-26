@@ -23,6 +23,8 @@ class Document extends Model
         'confidentiel',
         'version',
         'created_by',
+        'titre',
+        'description',
     ];
 
     protected function casts(): array

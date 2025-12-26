@@ -107,7 +107,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $demande->date_soumission ? $demande->date_soumission->format('d/m/Y H:i') : '-' }}</td>
-                                    <td>
+                                    <td class="actions-column">
                                         <div class="btn-group" role="group">
                                             <a href="{{ route('demandes.show', $demande) }}" class="btn btn-sm btn-outline-primary" title="Voir">
                                                 <i class="bi bi-eye"></i>
@@ -145,4 +145,23 @@
             @endif
         </x-card>
     @endsection
+
+    @push('styles')
+    <style>
+        .actions-column {
+            width: 130px;
+            white-space: nowrap;
+        }
+
+        .actions-column .btn {
+            width: 38px;
+            height: 38px;
+            padding: 0;
+        }
+
+        .actions-column .btn i {
+            font-size: 1rem;
+        }
+    </style>
+    @endpush
 </x-proto-layout>

@@ -26,6 +26,13 @@ class StoreDemandeRequest extends FormRequest
             'beneficiaires.*.beneficiaire_type' => ['required', 'in:fonctionnaire,ayant_droit'],
             'beneficiaires.*.beneficiaire_id' => ['required', 'integer'],
             'beneficiaires.*.role_dans_demande' => ['nullable', 'in:principal,secondaire'],
+            'documents' => ['nullable', 'array', 'max:5'],
+            'documents.*.type_document' => ['required_with:documents.*.file', 'in:passeport,carte_identite,acte_naissance,justificatif_domicile,photo_identite,autre'],
+            'documents.*.titre' => ['required_with:documents.*.file', 'string', 'max:255'],
+            'documents.*.description' => ['required_with:documents.*.file', 'string'],
+            'documents.*.file' => ['required_with:documents.*.titre', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:10240'],
+            'documents.*.beneficiaire_type' => ['nullable', 'in:fonctionnaire,ayant_droit'],
+            'documents.*.beneficiaire_id' => ['nullable', 'integer'],
         ];
     }
 
@@ -41,6 +48,11 @@ class StoreDemandeRequest extends FormRequest
             'beneficiaires.min' => 'Au moins un bénéficiaire est requis.',
             'beneficiaires.*.beneficiaire_type.required' => 'Le type de bénéficiaire est requis.',
             'beneficiaires.*.beneficiaire_id.required' => 'L\'identifiant du bénéficiaire est requis.',
+            'documents.*.titre.required_with' => 'Un titre est requis pour chaque pièce jointe.',
+            'documents.*.description.required_with' => 'Une description est requise pour chaque pièce jointe.',
+            'documents.*.file.required_with' => 'Un fichier est requis pour chaque pièce jointe.',
+            'documents.*.file.mimes' => 'Les pièces jointes doivent être au format PDF, JPG ou PNG.',
+            'documents.*.file.max' => 'Les pièces jointes ne peuvent pas dépasser 10 MB.',
         ];
     }
 }

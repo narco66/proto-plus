@@ -344,6 +344,8 @@ CREATE TABLE documents (
     beneficiaire_type ENUM('fonctionnaire', 'ayant_droit') NULL,
     beneficiaire_id BIGINT UNSIGNED NULL,
     type_document VARCHAR(100) NOT NULL,
+    titre VARCHAR(255) NOT NULL,
+    description TEXT NULL,
     nom_fichier VARCHAR(255) NOT NULL,
     chemin_fichier VARCHAR(500) NOT NULL,
     mime_type VARCHAR(100) NULL,
