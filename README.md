@@ -152,6 +152,8 @@ MAIL_FROM_NAME="${APP_NAME}"
 QUEUE_CONNECTION=database
 ```
 
+> Attention : ce dépôt ne versionne plus `.env`. Copiez `.env.example`, ajustez vos secrets locaux (APP_KEY, DB, mail, etc.) et régénérez la clé (`php artisan key:generate`). N'ajoutez jamais ce fichier au dépôt.
+
 ### Comptes par défaut
 
 Après `php artisan migrate --seed`, un compte administrateur est créé :
